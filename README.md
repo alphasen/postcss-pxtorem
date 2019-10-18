@@ -1,3 +1,6 @@
+# 扩展postcss-pxtorem
+增加白名单支持
+
 # postcss-pxtorem [![NPM version](https://badge.fury.io/js/postcss-pxtorem.svg)](http://badge.fury.io/js/postcss-pxtorem)
 
 A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units from pixel units.
@@ -5,7 +8,7 @@ A plugin for [PostCSS](https://github.com/ai/postcss) that generates rem units f
 ## Install
 
 ```shell
-$ npm install postcss-pxtorem --save-dev
+$ npm install postcss-pxtorem-md --save-dev
 ```
 
 ## Usage
@@ -57,13 +60,14 @@ fs.writeFile('main-rem.css', processedCss, function (err) {
 
 ### options
 
-Type: `Object | Null`  
+Type: `Object | Null`
 Default:
 ```js
 {
     rootValue: 16,
     unitPrecision: 5,
     propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
+    onlyWhiteList:[],
     selectorBlackList: [],
     replace: true,
     mediaQuery: false,
@@ -78,12 +82,13 @@ Default:
     - Use wildcard `*` to enable all properties. Example: `['*']`
     - Use `*` at the start or end of a word. (`['*position*']` will match `background-position-y`)
     - Use `!` to not match a property. Example: `['*', '!letter-spacing']`
-    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']` 
+    - Combine the "not" prefix with the other prefixes. Example: `['*', '!font*']`
 - `selectorBlackList` (Array) The selectors to ignore and leave as px.
     - If value is string, it checks to see if selector contains the string.
         - `['body']` will match `.body-class`
     - If value is regexp, it checks to see if the selector matches the regexp.
         - `[/^body$/]` will match `body` but not `.body`
+- `onlyWhiteList` is same to `selectorBlackList`,but usea as only white list (only deal with files that match the rules)
 - `replace` (Boolean) replaces rules containing rems instead of adding fallbacks.
 - `mediaQuery` (Boolean) Allow px to be converted in media queries.
 - `minPixelValue` (Number) Set the minimum pixel value to replace.
@@ -95,7 +100,7 @@ Default:
 var gulp = require('gulp');
 var postcss = require('gulp-postcss');
 var autoprefixer = require('autoprefixer');
-var pxtorem = require('postcss-pxtorem');
+var pxtorem = require('postcss-pxtorem-md');
 
 gulp.task('css', function () {
 

@@ -8,6 +8,7 @@ var filterPropList = require('./lib/filter-prop-list');
 var defaults = {
     rootValue: 16,
     unitPrecision: 5,
+    onlyWhiteList:[],
     selectorBlackList: [],
     propList: ['font', 'font-size', 'line-height', 'letter-spacing'],
     replace: true,
@@ -18,6 +19,7 @@ var defaults = {
 var legacyOptions = {
     'root_value': 'rootValue',
     'unit_precision': 'unitPrecision',
+    'only_white_list': 'onlyWhiteList',
     'selector_black_list': 'selectorBlackList',
     'prop_white_list': 'propList',
     'media_query': 'mediaQuery',
@@ -40,6 +42,10 @@ module.exports = postcss.plugin('postcss-pxtorem', function (options) {
             if (decl.value.indexOf('px') === -1) return;
 
             if (!satisfyPropList(decl.prop)) return;
+
+            // 如果不在onlyWhiteList指定的列表中，那么就跳出
+            if(!blacklistedSelector(opts.onlyWhiteList,decl.parent.selector))
+            return;
 
             if (blacklistedSelector(opts.selectorBlackList, decl.parent.selector)) return;
 
